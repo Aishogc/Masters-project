@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support Viewer</title>
+<style>
+  :root { --part:#4a90d9; --support:#e8590c; --border:#9aa4b2; --bg:#f6f7f9; --text:#1f2933; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); }
+  header { padding:16px 24px; border-bottom:1px solid #dde1e6; background:#fff; }
+  header h1 { margin:0; font-size:20px; }
+  header p { margin:4px 0 0; font-size:13px; color:#52606d; }
+  main { padding:24px; max-width:1400px; margin:0 auto; }
+  .uploads { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media (max-width:800px) { .uploads { grid-template-columns:1fr; } }
+  .panel h2 { font-size:16px; margin:0 0 10px; }
+  .drop { height:220px; border:3px dashed var(--border); border-radius:12px; background:#fff; display:flex; flex-direction:column;
+          align-items:center; justify-content:center; text-align:center; padding:16px; cursor:pointer; transition:background .15s,border-color .15s; }
+  .drop.over { background:#e8f1fb; border-color:var(--part); }
+  .drop.loaded { border-style:solid; border-color:#2f9e44; background:#f1faf3; }
+  .drop .big { font-size:15px; font-weight:600; }
+  .drop .small { font-size:13px; color:#52606d; margin-top:6px; }
+  .drop input { display:none; }
+  #error { margin-top:16px; padding:10px 14px; background:#fff0f0; border:1px solid #f1a7a7; border-radius:8px; color:#a61e1e; display:none; }
+  #warning { margin-top:16px; padding:10px 14px; background:#fff8e1; border:1px solid #f2d27a; border-radius:8px; color:#7a5b00; display:none; }
+  #result { display:none; margin-top:28px; }
+  .toolbar { display:flex; flex-wrap:wrap; gap:16px; align-items:center; margin-bottom:10px; font-size:14px; }
+  .legend span.sw { display:inline-block; width:14px; height:14px; border-radius:3px; vertical-align:-2px; margin-right:6px; }
+  .toolbar button { padding:5px 10px; border:1px solid var(--border); border-radius:6px; background:#fff; cursor:pointer; font-size:13px; }
+  .toolbar button:hover { background:#eef1f5; }
+  #viewer { width:100%; height:72vh; min-height:480px; border:1px solid var(--border); border-radius:12px; overflow:hidden; background:#dfe5ec; position:relative; }
+  #viewer canvas { display:block; }
+  #stats { margin-top:10px; font-size:13px; color:#3e4c59; }
+  #tolrow { display:flex; align-items:center; gap:10px; font-size:13px; }
+  #tolrow input[type=range] { width:200px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Support Viewer</h1>
+  <p>Everything runs in your browser. Your STL files are not uploaded anywhere.</p>
+</header>
+<main>
+  <div class="uploads">
+    <section class="panel">
+      <h2>Please upload your STL here</h2>
+      <label class="drop" id="drop1">
+        <span class="big" id="label1">Drag and drop an STL file here</span>
+        <span class="small" id="sub1">or click to browse</span>
+        <input type="file" id="file1" accept=".stl">
+      </label>
+    </section>
+    <section class="panel">
+      <h2>Please upload your STL with supports added here</h2>
+      <label class="drop" id="drop2">
+        <span class="big" id="label2">Drag and drop an STL file here</span>
+        <span class="small" id="sub2">or click to browse</span>
+        <input type="file" id="file2" accept=".stl">
+      </label>
+    </section>
+  </div>
+
+  <div id="error"></div>
+  <div id="warning"></div>
+
+  <section id="result">
+    <div class="toolbar">
+      <span class="legend"><span class="sw" style="background:var(--part)"></span>Part</span>
+      <span class="legend"><span class="sw" style="background:var(--support)"></span>Supports</span>
+      <label><input type="checkbox" id="showPart" checked> Show part</label>
+      <label><input type="checkbox" id="showSupport" checked> Show supports</label>
+      <span id="tolrow">Match tolerance <input type="range" id="tol" min="0" max="100" value="50"> <output id="tolOut"></output></span>
+      <span>
+        <button data-view="iso">Isometric</button>
+        <button data-view="front">Front</button>
+        <button data-view="back">Back</button>
+        <button data-view="right">Right</button>
+        <button data-view="left">Left</button>
+        <button data-view="top">Top</button>
+        <button data-view="bottom">Bottom</button>
+      </span>
+    </div>
+    <div id="viewer"></div>
+    <div id="stats"></div>
+    <p style="font-size:12px;color:#52606d">Left-drag: rotate. Right-drag: pan. Scroll: zoom. Z is up.</p>
+  </section>
+</main>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
