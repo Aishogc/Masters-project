@@ -12,8 +12,4 @@ Both files must share one coordinate frame (same position, orientation and units
 - `samples/`    `bunny.stl` and `bunny_with_supports.stl` (10 synthetic column supports) to try it with
 - `test/core.test.mjs`  tests for `core.js`:  `node test/core.test.mjs`
 
-## Publish on GitHub Pages
-1. Create a repository on github.com and upload all of these files (keep the folders).
-2. Settings > Pages > Build and deployment > Source: "Deploy from a branch", Branch: `main`, folder `/ (root)`, Save.
-3. After about a minute the page is live at `https://<your-username>.github.io/<repository-name>/`.
 
